@@ -22,8 +22,16 @@ if (process.env.NODE_ENV === 'development') {
 const PORT = process.env.PORT || 3000;
 
 // Routes
+// Category routes
 const categoryRoutes = require('./routes/category');
-app.use('/api/v1/categories', categoryRoutes);
+const productRoutes = require('./routes/product');
+
+const apiV1Router = express.Router();
+apiV1Router.use('/categories', categoryRoutes);
+apiV1Router.use('/products', productRoutes);
+
+app.use('/api/v1', apiV1Router);
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
