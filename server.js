@@ -1,11 +1,19 @@
 const express = require('express');
 const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' });
-
 const morgan = require('morgan');
 
+// Handle .env variables
+dotenv.config({ path: './config.env' });
+
+// Database connection
+const dbConnection = require('./config/database');
+dbConnection();
+
+// Express app
 const app = express();
 
+// Middleware
+app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
     console.log(`Mode is: ${process.env.NODE_ENV} mode`);
@@ -13,10 +21,10 @@ if (process.env.NODE_ENV === 'development') {
 
 const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-    res.send('Server is running!');
-});
-
+// Routes
+const categoryRoutes = require('./routes/category');
+app.use('/api/v1/categories', categoryRoutes);
+// Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
