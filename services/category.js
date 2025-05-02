@@ -1,6 +1,7 @@
 const { default: slugify } = require('slugify');
 const asyncHandler = require('express-async-handler');
 const Category = require('../models/category');
+const paginate = require('../utils/paginate')
 
 exports.createCategory = asyncHandler(async (req, res) => {
     const name = req.body.name;
@@ -16,15 +17,18 @@ exports.createCategory = asyncHandler(async (req, res) => {
 });
 
 exports.listCategories = asyncHandler(async (req, res) => {
-    const categories = await Category.find();
+    const { page = 1, limit = 10 } = req.query;
+    const paginationResult = await paginate(Category, page, limit);
+
     res.status(200).json({
         status: 'success',
         data: {
-            categories,
+            categories: paginationResult.data,
         },
+        ...paginationResult,
         message: 'Categories retrieved successfully',
     });
-})
+});
 
 exports.getCategory = asyncHandler(async (req, res) => {
     const { id } = req.params;

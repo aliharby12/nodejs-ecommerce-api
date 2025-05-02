@@ -1,6 +1,7 @@
 const Product = require('../models/product');
 const asyncHandler = require('express-async-handler');
 const slugify = require('slugify');
+const paginate = require('../utils/paginate');
 
 // Create a new product
 exports.createProduct = asyncHandler(async (req, res) => {
@@ -18,19 +19,15 @@ exports.createProduct = asyncHandler(async (req, res) => {
 
 // Get all products
 exports.getAllProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find();
-    if (!products || products.length === 0) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'No products found',
-            data: []
-        });
-    }
+    const { page = 1, limit = 10 } = req.query;
+    const paginationResult = await paginate(Product, page, limit);
+
     res.status(200).json({
         status: 'success',
         data: {
-            products,
+            products: paginationResult.data,
         },
+        ...paginationResult,
         message: 'Products retrieved successfully',
     });
 
