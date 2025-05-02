@@ -1,35 +1,70 @@
 const Product = require('../models/product');
 
 // Create a new product
-exports.createProduct = async (productData) => {
+exports.createProduct = async (req, res) => {
+    const { title, price, category_id, description } = req.body;
     try {
-        const product = new Product(productData);
-        await product.save();
-        return { status: 'success', data: product, message: 'Product created successfully' };
+        const newProduct = await Product.create({ title, price, category_id, description });
+        res.status(201).json({
+            status: 'success',
+            data: {
+                product: newProduct,
+            },
+            message: 'Product created successfully',
+        });
     } catch (error) {
-        return { status: 'fail', message: error.message, data: [] };
+        res.status(400).json({
+            status: 'fail',
+            message: error.message,
+            data: []
+        });
     }
-};
+}
 
 // Get all products
-exports.getAllProducts = async () => {
+exports.getAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
-        return { status: 'success', data: products, message: 'Products retrieved successfully' };
+        res.status(200).json({
+            status: 'success',
+            data: {
+                products,
+            },
+            message: 'Products retrieved successfully',
+        });
     } catch (error) {
-        return { status: 'fail', message: error.message, data: [] };
+        res.status(400).json({
+            status: 'fail',
+            message: error.message,
+            data: []
+        });
     }
 };
 
 // Get a single product by ID
-exports.getProductById = async (productId) => {
+exports.getProductById = async (req, res) => {
+    const { id } = req.params;
     try {
-        const product = await Product.findById(productId);
+        const product = await Product.findById(id);
         if (!product) {
-            return { status: 'fail', message: 'Product not found', data: [] };
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Product not found',
+                data: []
+            });
         }
-        return { status: 'success', data: product, message: 'Product retrieved successfully' };
+        res.status(200).json({
+            status: 'success',
+            data: {
+                product,
+            },
+            message: 'Product retrieved successfully',
+        });
     } catch (error) {
-        return { status: 'fail', message: error.message, data: [] };
+        res.status(400).json({
+            status: 'fail',
+            message: error.message,
+            data: []
+        });
     }
-};
+}
