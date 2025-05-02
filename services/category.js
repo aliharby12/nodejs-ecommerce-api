@@ -1,23 +1,11 @@
+const { default: slugify } = require('slugify');
 const Category = require('../models/category');
 
 exports.createCategory = async (req, res) => {
-    const { name, description } = req.body;
-    try {
-        const newCategory = await Category.create({ name, description });
-        res.status(201).json({
-            status: 'success',
-            data: {
-                category: newCategory,
-            },
-            message: 'Category created successfully',
-        });
-    } catch (error) {
-        res.status(400).json({
-            status: 'fail',
-            message: error.message,
-            data: []
-        });
-    }
+    const name = req.body.name;
+    Category.create({ name, slug: slugify(name, { lower: true }), description: req.body.description, image: req.body.image })
+        .then((category) => res.status(201).json({ data: category }))
+        .catch((error) => res.status(400).json({ status: 'fail', message: error.message }));
 }
 
 exports.listCategories = async (req, res) => {

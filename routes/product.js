@@ -7,8 +7,6 @@ const {
 } = require('../services/product');
 
 // Routes
-router.post('/', createProduct); // Create a new product
-router.get('/', getAllProducts); // Get all products
-router.get('/:id', getProductById); // Get a product by ID
+router.post('/', createProduct).get('/', getAllProducts).get('/:id', getProductById);
 
 module.exports = router;
