@@ -5,7 +5,9 @@ const paginate = require('../utils/paginate')
 
 exports.createCategory = asyncHandler(async (req, res) => {
     const name = req.body.name;
-    const category = await Category.create({ name, slug: slugify(name, { lower: true }), description: req.body.description, image: req.body.image })
+    const category = await Category.create({
+        name, slug: slugify(name, { lower: true }), description: req.body.description, image: req.body.image, runValidators: true
+    });
 
     res.status(201).json({
         status: 'success',
@@ -55,3 +57,40 @@ exports.getCategory = asyncHandler(async (req, res) => {
         message: 'Category retrieved successfully',
     });
 })
+
+exports.updateCategory = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Category ID is required',
+            data: []
+        });
+    }
+
+    const updates = req.body;
+    if (updates.name) {
+        updates.slug = slugify(updates.name, { lower: true });
+    }
+
+    const category = await Category.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+    });
+
+    if (!category) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Category not found',
+            data: []
+        });
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            category,
+        },
+        message: 'Category updated successfully',
+    });
+});

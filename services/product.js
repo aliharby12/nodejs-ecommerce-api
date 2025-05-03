@@ -59,3 +59,36 @@ exports.getProductById = asyncHandler(async (req, res) => {
         message: 'Product retrieved successfully',
     });
 })
+
+exports.updateProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Product ID is required',
+            data: []
+        });
+    }
+
+    const updates = req.body;
+    if (updates.title) {
+        updates.slug = slugify(updates.title, { lower: true });
+    }
+    const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+
+    if (!updatedProduct) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Product not found',
+            data: []
+        });
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            product: updatedProduct,
+        },
+        message: 'Product updated successfully',
+    });
+})
