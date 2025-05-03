@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const ApiErrorHandler = require('./utils/errorHandler');
 
 // Handle .env variables
 dotenv.config({ path: './config.env' });
@@ -40,18 +41,22 @@ app.get('/', (req, res) => {
     });
 });
 
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({
-        status: 'fail',
-        message: `Route not found for: ${req.originalUrl}`,
-    });
+// 404 handler (should be after all other routes)
+app.use((req, res, next) => {
+    const err = new ApiErrorHandler(`Can't find ${req.originalUrl} on this server!`, 404);
+    next(err);
 });
 
-// Global error handler
+// Error-handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(400).json({ error: err.message });
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
+
+    res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+        stack: process.env.NODE_ENV === 'development' ? err.stack : {},
+    });
 });
 
 // Start server
