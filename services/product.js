@@ -60,6 +60,7 @@ exports.getProductById = asyncHandler(async (req, res) => {
     });
 })
 
+// Update a product
 exports.updateProduct = asyncHandler(async (req, res) => {
     const { id } = req.params;
     if (!id) {
@@ -90,5 +91,33 @@ exports.updateProduct = asyncHandler(async (req, res) => {
             product: updatedProduct,
         },
         message: 'Product updated successfully',
+    });
+})
+
+// Delete a product
+exports.deleteProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Product ID is required',
+            data: []
+        });
+    }
+
+    const deletedProduct = await Product.findByIdAndDelete(id);
+
+    if (!deletedProduct) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Product not found',
+            data: []
+        });
+    }
+
+    res.status(204).json({
+        status: 'success',
+        data: null,
+        message: 'Product deleted successfully',
     });
 })
