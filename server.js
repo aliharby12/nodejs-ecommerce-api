@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const ApiErrorHandler = require('./utils/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
 
 // Handle .env variables
 dotenv.config({ path: './config.env' });
@@ -48,16 +49,7 @@ app.use((req, res, next) => {
 });
 
 // Error-handling middleware
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-
-    res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : {},
-    });
-});
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
