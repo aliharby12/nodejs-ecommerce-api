@@ -31,8 +31,7 @@ exports.updateProductValidator = [
     check('title')
         .optional()
         .isLength({ min: 3 })
-        .withMessage('Product title must be at least 3 characters long')
-        .withMessage('Product title must contain only letters and numbers'),
+        .withMessage('Product title must be at least 3 characters long'),
     check('description')
         .optional()
         .isLength({ max: 500 })
