@@ -1,4 +1,11 @@
 const router = require('express').Router();
+const {
+    createProductValidator,
+    getProductValidator,
+    updateProductValidator,
+    deleteProductValidator,
+    getAllProductValidator,
+} = require('../utils/productValidator');
 
 const {
     getAllProducts,
@@ -9,10 +16,21 @@ const {
 } = require('../services/product');
 
 // Routes
-router.post('/', createProduct)
-    .get('/', getAllProducts)
-    .get('/:id', getProductById)
-    .patch('/:id', updateProduct)
-    .delete('/:id', deleteProduct);
+router.route('/')
+    .post(
+        createProductValidator, createProduct
+    )
+    .get(getAllProductValidator, getAllProducts);
+
+router.route('/:id')
+    .get(
+        getProductValidator, getProductById
+    )
+    .patch(
+        updateProductValidator, updateProduct
+    )
+    .delete(
+        deleteProductValidator, deleteProduct
+    );
 
 module.exports = router;
