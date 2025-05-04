@@ -57,7 +57,7 @@ exports.getProductById = asyncHandler(async (req, res, next) => {
 exports.updateProduct = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     if (!id) {
-        next(new ApiErrorHandler('Product ID is required', 400));
+        return next(new ApiErrorHandler('Product ID is required', 400));
     }
 
     const updates = req.body;
@@ -67,7 +67,7 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
     const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
 
     if (!updatedProduct) {
-        next(new ApiErrorHandler('Product not found', 404));
+        return next(new ApiErrorHandler('Product not found', 404));
     }
 
     res.status(200).json({
@@ -83,13 +83,13 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     if (!id) {
-        next(new ApiErrorHandler('Product ID is required', 400));
+        return next(new ApiErrorHandler('Product ID is required', 400));
     }
 
     const deletedProduct = await Product.findByIdAndDelete(id);
 
     if (!deletedProduct) {
-        next(new ApiErrorHandler('Product not found', 404));
+        return next(new ApiErrorHandler('Product not found', 404));
     }
 
     res.status(204).json({

@@ -5,7 +5,7 @@ const errorHandler = (err, req, res, next) => {
     res.status(err.statusCode).json({
         status: err.status,
         message: err.message,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : {},
+        stack: process.env.NODE_ENV === 'development' ? (typeof err.stack === 'string' ? err.stack.split('\n').map(line => line.trim()) : []) : {},
     });
 }
 
