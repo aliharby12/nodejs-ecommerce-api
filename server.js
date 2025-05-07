@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const ApiErrorHandler = require('./utils/errorHandler');
 const errorHandler = require('./middlewares/errorHandler');
+const { authenticate } = require('./middlewares/auth');
 
 // Handle .env variables
 dotenv.config({ path: './config.env' });
@@ -28,11 +29,13 @@ const PORT = process.env.PORT || 3000;
 const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
 const brandRoutes = require('./routes/brand');
+const authRoutes = require('./routes/auth');
 
 const apiV1Router = express.Router();
-apiV1Router.use('/categories', categoryRoutes);
-apiV1Router.use('/products', productRoutes);
-apiV1Router.use('/brands', brandRoutes);
+apiV1Router.use('/categories', authenticate, categoryRoutes);
+apiV1Router.use('/products', authenticate, productRoutes);
+apiV1Router.use('/brands', authenticate, brandRoutes);
+apiV1Router.use('/auth', authRoutes);
 
 app.use('/api/v1', apiV1Router);
 

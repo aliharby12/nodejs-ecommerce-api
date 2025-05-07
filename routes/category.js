@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const {
     createCategory,
     listCategories,
@@ -19,7 +20,7 @@ const {
 router.route('/')
     .post(
         createCategoryValidator,
-        createCategory
+        createCategory,
     )
     .get(
         listCategoriesValidator,

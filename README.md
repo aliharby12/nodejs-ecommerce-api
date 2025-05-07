@@ -50,8 +50,14 @@ A RESTful API built with Node.js for managing an e-commerce platform. This proje
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user.
-- `POST /api/auth/login` - Login a user.
+- `POST /api/auth/register` - Register a new user to get a token.
+- `POST /api/auth/login` - Login a user to get a token.
+
+### Note
+> All endpoints that require a token expect it to be included in the `Authorization` header as a Bearer token. For example:
+> ```
+> Authorization: Bearer your_token_here
+> ```
 
 ### Products
 - `GET /api/products` - Get all products.
