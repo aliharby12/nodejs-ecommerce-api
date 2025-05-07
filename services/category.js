@@ -37,7 +37,8 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 // Get all categories
 exports.listCategories = asyncHandler(async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
-    const paginationResult = await paginate(Category, page, limit, 'parentCategory');
+    const categories = await Category.find().populate('parentCategory');
+    const paginationResult = await paginate(categories, page, limit);
 
     res.status(200).json({
         status: 'success',
@@ -115,5 +116,33 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
         status: 'success',
         data: null,
         message: 'Category deleted successfully',
+    });
+});
+
+
+// List all subcategories for a specific parent category
+exports.listSubcategories = asyncHandler(async (req, res, next) => {
+    const { parentId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    if (!parentId) {
+        return next(new ApiErrorHandler('Parent category ID is required', 400));
+    }
+
+    const parentCategory = await Category.findById(parentId);
+    if (!parentCategory) {
+        return next(new ApiErrorHandler('Parent category not found', 404));
+    }
+
+    const subcategories = await Category.find({ parentCategory: parentId });
+
+    const paginationResult = await paginate(subcategories, page, limit);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            paginatedData: paginationResult.data,
+        },
+        ...paginationResult,
+        message: 'Subcategories retrieved successfully',
     });
 });

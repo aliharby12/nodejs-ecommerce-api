@@ -3,11 +3,23 @@ const asyncHandler = require('express-async-handler');
 const slugify = require('slugify');
 const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
+const Category = require('../models/category');
 
 // Create a new product
 exports.createProduct = asyncHandler(async (req, res, next) => {
     const { title, price, category_id, description } = req.body;
-    const newProduct = await Product.create({ title, price, category_id, description });
+    let categoryDoc = null;
+    if (category_id) {
+        categoryDoc = await Category.findById(category_id);
+        if (!categoryDoc) {
+            return next(new ApiErrorHandler('Category not found', 404));
+        }
+    }
+    const newProduct = await Product.create({
+        title, price,
+        category_id: categoryDoc ? categoryDoc._id : null,
+        description
+    });
     res.status(201).json({
         status: 'success',
         data: {
@@ -21,7 +33,8 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
 // Get all products
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
-    const paginationResult = await paginate(Product, page, limit);
+    const products = await Product.find().populate('category_id');
+    const paginationResult = await paginate(products, page, limit);
 
     res.status(200).json({
         status: 'success',
@@ -40,7 +53,7 @@ exports.getProductById = asyncHandler(async (req, res, next) => {
     if (!id) {
         return next(new ApiErrorHandler('Product ID is required', 400));
     }
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate('category_id');
     if (!product) {
         return next(new ApiErrorHandler('Product not found', 404));
     }
