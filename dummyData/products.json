@@ -1,0 +1,52 @@
+[
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9d1",
+        "title": "iPhone 13 Pro",
+        "slug": "iphone-13-pro",
+        "price": 999,
+        "description": "The latest iPhone with Pro camera system",
+        "category_id": "64d4e5a9b3b6a1f3b4e5a9b2",
+        "createdAt": "2023-08-10T10:40:00.000Z",
+        "updatedAt": "2023-08-10T10:40:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9d2",
+        "title": "Galaxy S21 Ultra",
+        "slug": "galaxy-s21-ultra",
+        "price": 1199,
+        "description": "Samsung flagship smartphone with S Pen support",
+        "category_id": "64d4e5a9b3b6a1f3b4e5a9b2",
+        "createdAt": "2023-08-10T10:45:00.000Z",
+        "updatedAt": "2023-08-10T10:45:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9d3",
+        "title": "MacBook Pro 16\"",
+        "slug": "macbook-pro-16",
+        "price": 2399,
+        "description": "Powerful laptop for professionals with M1 Pro chip",
+        "category_id": "64d4e5a9b3b6a1f3b4e5a9b3",
+        "createdAt": "2023-08-10T10:50:00.000Z",
+        "updatedAt": "2023-08-10T10:50:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9d4",
+        "title": "XPS 15",
+        "slug": "xps-15",
+        "price": 1799,
+        "description": "Dell's premium laptop with infinity-edge display",
+        "category_id": "64d4e5a9b3b6a1f3b4e5a9b3",
+        "createdAt": "2023-08-10T10:55:00.000Z",
+        "updatedAt": "2023-08-10T10:55:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9d5",
+        "title": "Air Max 270",
+        "slug": "air-max-270",
+        "price": 150,
+        "description": "Comfortable Nike sneakers with Max Air cushioning",
+        "category_id": "64d4e5a9b3b6a1f3b4e5a9b4",
+        "createdAt": "2023-08-10T11:00:00.000Z",
+        "updatedAt": "2023-08-10T11:00:00.000Z"
+    }
+]

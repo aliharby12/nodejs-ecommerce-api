@@ -1,0 +1,34 @@
+[
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9c1",
+        "name": "Apple",
+        "slug": "apple",
+        "image": "apple.jpg",
+        "createdAt": "2023-08-10T10:20:00.000Z",
+        "updatedAt": "2023-08-10T10:20:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9c2",
+        "name": "Samsung",
+        "slug": "samsung",
+        "image": "samsung.jpg",
+        "createdAt": "2023-08-10T10:25:00.000Z",
+        "updatedAt": "2023-08-10T10:25:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9c3",
+        "name": "Dell",
+        "slug": "dell",
+        "image": "dell.jpg",
+        "createdAt": "2023-08-10T10:30:00.000Z",
+        "updatedAt": "2023-08-10T10:30:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9c4",
+        "name": "Nike",
+        "slug": "nike",
+        "image": "nike.jpg",
+        "createdAt": "2023-08-10T10:35:00.000Z",
+        "updatedAt": "2023-08-10T10:35:00.000Z"
+    }
+]

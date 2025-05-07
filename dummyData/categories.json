@@ -1,0 +1,42 @@
+[
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9b1",
+        "name": "Electronics",
+        "slug": "electronics",
+        "description": "All electronic devices and accessories",
+        "image": "electronics.jpg",
+        "parentCategory": null,
+        "createdAt": "2023-08-10T10:00:00.000Z",
+        "updatedAt": "2023-08-10T10:00:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9b2",
+        "name": "Smartphones",
+        "slug": "smartphones",
+        "description": "Latest smartphones and mobile devices",
+        "image": "smartphones.jpg",
+        "parentCategory": "64d4e5a9b3b6a1f3b4e5a9b1",
+        "createdAt": "2023-08-10T10:05:00.000Z",
+        "updatedAt": "2023-08-10T10:05:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9b3",
+        "name": "Laptops",
+        "slug": "laptops",
+        "description": "High-performance laptops and notebooks",
+        "image": "laptops.jpg",
+        "parentCategory": "64d4e5a9b3b6a1f3b4e5a9b1",
+        "createdAt": "2023-08-10T10:10:00.000Z",
+        "updatedAt": "2023-08-10T10:10:00.000Z"
+    },
+    {
+        "_id": "64d4e5a9b3b6a1f3b4e5a9b4",
+        "name": "Clothing",
+        "slug": "clothing",
+        "description": "Fashionable clothing for all ages",
+        "image": "clothing.jpg",
+        "parentCategory": null,
+        "createdAt": "2023-08-10T10:15:00.000Z",
+        "updatedAt": "2023-08-10T10:15:00.000Z"
+    }
+]
