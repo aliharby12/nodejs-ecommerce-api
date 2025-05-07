@@ -3,6 +3,8 @@ const asyncHandler = require('express-async-handler');
 const Brand = require('../models/brand');
 const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
+const brandFilter = require('../filtersAndSort/brand');
+const sortBrand = require('../filtersAndSort/generalSort');
 
 // Create a new brand
 exports.createBrand = asyncHandler(async (req, res, next) => {
@@ -27,7 +29,12 @@ exports.createBrand = asyncHandler(async (req, res, next) => {
 // Get all brands
 exports.listBrands = asyncHandler(async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
-    const brands = await Brand.find();
+
+    const filter = brandFilter(req.query);
+    const sort = sortBrand(req.query);
+
+    const brands = await Brand.find(filter).sort(sort);
+
     const paginationResult = await paginate(brands, page, limit);
 
     res.status(200).json({

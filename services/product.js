@@ -4,6 +4,10 @@ const slugify = require('slugify');
 const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
 const Category = require('../models/category');
+const productFilter = require('../filtersAndSort/product');
+const sortProduct = require('../filtersAndSort/generalSort');
+const generalQuerySort = require('../filtersAndSort/generalSort');
+
 
 // Create a new product
 exports.createProduct = asyncHandler(async (req, res, next) => {
@@ -33,9 +37,13 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
 // Get all products
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
-    const products = await Product.find().populate('category_id');
-    const paginationResult = await paginate(products, page, limit);
 
+    const filter = productFilter(req.query);
+    const sort = generalQuerySort(req.query);
+
+    const products = await Product.find(filter).sort(sort).populate('category_id');
+
+    const paginationResult = await paginate(products, page, limit);
     res.status(200).json({
         status: 'success',
         data: {

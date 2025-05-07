@@ -3,6 +3,9 @@ const asyncHandler = require('express-async-handler');
 const Category = require('../models/category');
 const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
+const categoryFilterAndSort = require('../filtersAndSort/category');
+const sortCategory = require('../filtersAndSort/generalSort');
+const categoryFilter = require('../filtersAndSort/category');
 
 // Create a new category
 exports.createCategory = asyncHandler(async (req, res, next) => {
@@ -34,10 +37,14 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
     });
 });
 
-// Get all categories
+// Get all categories with optional filters
 exports.listCategories = asyncHandler(async (req, res, next) => {
-    const { page = 1, limit = 10 } = req.query;
-    const categories = await Category.find().populate('parentCategory');
+    const { page = 1, limit = 10, name, parentCategory } = req.query;
+
+    const filter = categoryFilterAndSort(req.query);
+    const sort = sortCategory(req.query);
+
+    const categories = await Category.find(filter).sort(sort).populate('parentCategory');
     const paginationResult = await paginate(categories, page, limit);
 
     res.status(200).json({
@@ -133,7 +140,9 @@ exports.listSubcategories = asyncHandler(async (req, res, next) => {
         return next(new ApiErrorHandler('Parent category not found', 404));
     }
 
-    const subcategories = await Category.find({ parentCategory: parentId });
+    const filter = categoryFilter(req.query);
+    const sort = sortCategory(req.query);
+    const subcategories = await Category.find({ parentCategory: parentId, ...filter }).sort(sort).populate('parentCategory');
 
     const paginationResult = await paginate(subcategories, page, limit);
 
