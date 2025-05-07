@@ -5,6 +5,7 @@ const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
 const brandFilter = require('../filtersAndSort/brand');
 const sortBrand = require('../filtersAndSort/generalSort');
+const brandFields = require('../filtersAndSort/generalFieldsQuery');
 
 // Create a new brand
 exports.createBrand = asyncHandler(async (req, res, next) => {
@@ -32,8 +33,9 @@ exports.listBrands = asyncHandler(async (req, res, next) => {
 
     const filter = brandFilter(req.query);
     const sort = sortBrand(req.query);
+    const fields = brandFields(req.query);
 
-    const brands = await Brand.find(filter).sort(sort);
+    const brands = await Brand.find(filter).sort(sort).select(fields);
 
     const paginationResult = await paginate(brands, page, limit);
 

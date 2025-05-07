@@ -1,5 +1,13 @@
 const router = require('express').Router();
-const { createCategory, listCategories, getCategory, updateCategory, deleteCategory, listSubcategories } = require('../services/category');
+const {
+    createCategory,
+    listCategories,
+    getCategory,
+    updateCategory,
+    deleteCategory,
+    listSubcategories,
+    listCategoryProducts
+} = require('../services/category');
 const {
     createCategoryValidator,
     listCategoriesValidator,
@@ -34,5 +42,8 @@ router.route('/:id')
 
 // list all subcategories of a category
 router.get('/:parentId/subcategories', listSubcategories);
+
+// list all products of a category
+router.get('/:categoryId/products', listCategoryProducts);
 
 module.exports = router;

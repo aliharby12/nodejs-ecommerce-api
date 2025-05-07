@@ -1,11 +1,13 @@
 const { default: slugify } = require('slugify');
 const asyncHandler = require('express-async-handler');
 const Category = require('../models/category');
+const Product = require('../models/product');
 const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
 const categoryFilterAndSort = require('../filtersAndSort/category');
 const sortCategory = require('../filtersAndSort/generalSort');
 const categoryFilter = require('../filtersAndSort/category');
+const categoryFields = require('../filtersAndSort/generalFieldsQuery');
 
 // Create a new category
 exports.createCategory = asyncHandler(async (req, res, next) => {
@@ -43,8 +45,9 @@ exports.listCategories = asyncHandler(async (req, res, next) => {
 
     const filter = categoryFilterAndSort(req.query);
     const sort = sortCategory(req.query);
+    const fields = categoryFields(req.query);
 
-    const categories = await Category.find(filter).sort(sort).populate('parentCategory');
+    const categories = await Category.find(filter).sort(sort).select(fields).populate('parentCategory');
     const paginationResult = await paginate(categories, page, limit);
 
     res.status(200).json({
@@ -142,7 +145,14 @@ exports.listSubcategories = asyncHandler(async (req, res, next) => {
 
     const filter = categoryFilter(req.query);
     const sort = sortCategory(req.query);
-    const subcategories = await Category.find({ parentCategory: parentId, ...filter }).sort(sort).populate('parentCategory');
+    const fields = categoryFields(req.query);
+
+    const subcategories = await Category
+        .find({ parentCategory: parentId, ...filter })
+        .sort(sort)
+        .select(fields)
+        .populate('parentCategory'
+        );
 
     const paginationResult = await paginate(subcategories, page, limit);
 
@@ -155,3 +165,32 @@ exports.listSubcategories = asyncHandler(async (req, res, next) => {
         message: 'Subcategories retrieved successfully',
     });
 });
+
+// Get products by category
+exports.listCategoryProducts = asyncHandler(async (req, res, next) => {
+    const { categoryId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    if (!categoryId) {
+        return next(new ApiErrorHandler('Category ID is required', 400));
+    }
+
+    const filter = categoryFilter(req.query);
+    const sort = sortCategory(req.query);
+    const fields = categoryFields(req.query);
+
+    const products = await Product.find({ category_id: categoryId, ...filter }).sort(sort).select(fields).populate('category_id');
+    const paginationResult = await paginate(products, page, limit);
+
+    if (!products || products.length === 0) {
+        return next(new ApiErrorHandler('No products found for this category', 404));
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            products: paginationResult.data,
+            ...paginationResult,
+        },
+        message: 'Products retrieved successfully',
+    });
+})

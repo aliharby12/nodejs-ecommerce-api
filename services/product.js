@@ -5,8 +5,8 @@ const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
 const Category = require('../models/category');
 const productFilter = require('../filtersAndSort/product');
-const sortProduct = require('../filtersAndSort/generalSort');
-const generalQuerySort = require('../filtersAndSort/generalSort');
+const productSort = require('../filtersAndSort/generalSort');
+const productFields = require('../filtersAndSort/generalFieldsQuery');
 
 
 // Create a new product
@@ -39,9 +39,10 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
 
     const filter = productFilter(req.query);
-    const sort = generalQuerySort(req.query);
+    const sort = productSort(req.query);
+    const fields = productFields(req.query);
 
-    const products = await Product.find(filter).sort(sort).populate('category_id');
+    const products = await Product.find(filter).sort(sort).select(fields).populate('category_id');
 
     const paginationResult = await paginate(products, page, limit);
     res.status(200).json({
