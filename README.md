@@ -36,7 +36,7 @@ A RESTful API built with Node.js for managing an e-commerce platform. This proje
     ```
 
 3. Set up environment variables:
-    Create a `.env` file in the root directory and configure the following:
+    Create a `config.env` file in the root directory and configure the following:
     ```
     NODE_ENV=development
     PORT=3000
