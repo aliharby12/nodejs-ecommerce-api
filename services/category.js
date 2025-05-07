@@ -4,10 +4,10 @@ const Category = require('../models/category');
 const Product = require('../models/product');
 const paginate = require('../utils/paginate');
 const ApiErrorHandler = require('../utils/errorHandler');
-const categoryFilterAndSort = require('../filtersAndSort/category');
-const sortCategory = require('../filtersAndSort/generalSort');
 const categoryFilter = require('../filtersAndSort/category');
+const sortCategory = require('../filtersAndSort/generalSort');
 const categoryFields = require('../filtersAndSort/generalFieldsQuery');
+const categorySearch = require('../filtersAndSort/generalSearch');
 
 // Create a new category
 exports.createCategory = asyncHandler(async (req, res, next) => {
@@ -41,11 +41,16 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 
 // Get all categories with optional filters
 exports.listCategories = asyncHandler(async (req, res, next) => {
-    const { page = 1, limit = 10, name, parentCategory } = req.query;
+    const { page = 1, limit = 10 } = req.query;
 
-    const filter = categoryFilterAndSort(req.query);
+    const filter = categoryFilter(req.query);
     const sort = sortCategory(req.query);
     const fields = categoryFields(req.query);
+
+    if (req.query.search) {
+        const searchConditions = categorySearch(req.query.search, ['name', 'description']);
+        Object.assign(filter, searchConditions);
+    }
 
     const categories = await Category.find(filter).sort(sort).select(fields).populate('parentCategory');
     const paginationResult = await paginate(categories, page, limit);
