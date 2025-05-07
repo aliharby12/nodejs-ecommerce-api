@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const ApiErrorHandler = require('./utils/errorHandler');
 const errorHandler = require('./middlewares/errorHandler');
 const { authenticate } = require('./middlewares/auth');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 // Handle .env variables
 dotenv.config({ path: './config.env' });
@@ -38,6 +40,9 @@ apiV1Router.use('/brands', authenticate, brandRoutes);
 apiV1Router.use('/auth', authRoutes);
 
 app.use('/api/v1', apiV1Router);
+
+// Serve Swagger documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check route
 app.get('/', (req, res) => {
