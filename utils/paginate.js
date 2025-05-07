@@ -1,6 +1,13 @@
-const paginate = async (model, page, limit) => {
+const paginate = async (model, page, limit, parentField = null) => {
     const skip = (page - 1) * limit;
-    const data = await model.find().skip(skip).limit(limit);
+    let query = model.find();
+
+    // Populate parent field if provided
+    if (parentField) {
+        query = query.populate(parentField);
+    }
+
+    const data = await query.skip(skip).limit(limit);
     const total = await model.countDocuments();
 
     return {

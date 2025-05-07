@@ -11,10 +11,7 @@ exports.createCategoryValidator = [
         .notEmpty()
         .withMessage('Category name is required')
         .isLength({ min: 3 })
-        .withMessage('Category name must be at least 3 characters long')
-        .isAlphanumeric()
-        .matches(/^[a-zA-Z0-9\s.,'_-\s]+$/)
-        .withMessage('Category name must contain only letters, numbers, spaces, or -_,.'),
+        .withMessage('Category name must be at least 3 characters long'),
     check('description')
         .optional()
         .isLength({ max: 500 })
@@ -26,9 +23,7 @@ exports.updateCategoryValidator = [
     check('name')
         .optional()
         .isLength({ min: 3 })
-        .withMessage('Category name must be at least 3 characters long')
-        .isAlphanumeric()
-        .withMessage('Category name must contain only letters and numbers'),
+        .withMessage('Category name must be at least 3 characters long'),
     check('description')
         .optional()
         .isLength({ max: 500 })

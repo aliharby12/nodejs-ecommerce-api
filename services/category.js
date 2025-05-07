@@ -6,9 +6,23 @@ const ApiErrorHandler = require('../utils/errorHandler');
 
 // Create a new category
 exports.createCategory = asyncHandler(async (req, res, next) => {
-    const name = req.body.name;
+    const { name, parentCategory, description, image } = req.body;
+
+    let parentCategoryDoc = null;
+    if (parentCategory) {
+        parentCategoryDoc = await Category.findById(parentCategory);
+        if (!parentCategoryDoc) {
+            return next(new ApiErrorHandler('Parent category not found', 404));
+        }
+    }
+
     const category = await Category.create({
-        name, slug: slugify(name, { lower: true }), description: req.body.description, image: req.body.image, runValidators: true
+        name,
+        slug: slugify(name, { lower: true }),
+        description,
+        image,
+        parentCategory: parentCategoryDoc ? parentCategoryDoc._id : null,
+        runValidators: true,
     });
 
     res.status(201).json({
@@ -23,7 +37,7 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 // Get all categories
 exports.listCategories = asyncHandler(async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
-    const paginationResult = await paginate(Category, page, limit);
+    const paginationResult = await paginate(Category, page, limit, 'parentCategory');
 
     res.status(200).json({
         status: 'success',
@@ -41,7 +55,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
     if (!id) {
         return next(new ApiErrorHandler('Category ID is required', 400));
     }
-    const category = await Category.findById(id);
+    const category = await Category.findById(id).populate('parentCategory');
     if (!category) {
         return next(new ApiErrorHandler('Category not found', 404));
     }
