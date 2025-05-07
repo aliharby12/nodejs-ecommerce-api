@@ -10,6 +10,7 @@ A RESTful API built with Node.js for managing an e-commerce platform. This proje
 - Pagination and filtering for product listings.
 - Error handling and validation.
 - Environment-based configuration.
+- Swagger API documentation.
 
 ## Technologies Used
 
@@ -19,6 +20,7 @@ A RESTful API built with Node.js for managing an e-commerce platform. This proje
 - **Mongoose**: ODM for MongoDB.
 - **JWT**: Authentication.
 - **dotenv**: Environment variable management.
+- **Swagger**: API documentation.
 
 ## Installation
 
@@ -44,8 +46,19 @@ A RESTful API built with Node.js for managing an e-commerce platform. This proje
 
 4. Start the server:
     ```bash
-    npm start
+    npm run dev
     ```
+
+5. Access Swagger Documentation:
+    Once the server is running, you can access the Swagger UI documentation at:
+    ```
+    http://localhost:3000/api-docs
+    ```
+    This interactive documentation allows you to:
+    - Explore all available endpoints
+    - Test API endpoints directly from the browser
+    - View request/response schemas
+    - Understand authentication requirements
 
 ## API Endpoints
 
