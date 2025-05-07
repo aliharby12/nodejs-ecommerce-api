@@ -27,10 +27,12 @@ const PORT = process.env.PORT || 3000;
 // Category routes
 const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
+const brandRoutes = require('./routes/brand');
 
 const apiV1Router = express.Router();
 apiV1Router.use('/categories', categoryRoutes);
 apiV1Router.use('/products', productRoutes);
+apiV1Router.use('/brands', brandRoutes);
 
 app.use('/api/v1', apiV1Router);
 
